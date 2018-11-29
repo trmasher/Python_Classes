@@ -13,7 +13,9 @@ import re #imports regular expressions
 class DnD_Character:
     '''Creates an object of the DnD Character type. This includes their natural statistics.'''
     
-    def __init__(self,strength=0,dexterity=0,constitution=0,intelligence=0,wisdom=0,charisma=0):
+    def __init__(self,race='Human',char_class='Fighter',strength=0,dexterity=0,constitution=0,intelligence=0,wisdom=0,charisma=0):
+        self.race = race
+        self.char_class = char_class
         self.strength = strength
         self.dexterity = dexterity
         self.constitution = constitution
@@ -21,12 +23,55 @@ class DnD_Character:
         self.wisdom = wisdom
         self.charisma = charisma
     
+    
+#We force 'race' to be of the acceptable DnD races:
+    def auto_race(self):
+        return self._r
+    
+    def set_race(self, race):
+        race_list = ['Dwarf','Elf','Halfling','Human','Dragonborn','Gnome','Half-Elf','Half-Orc','Tiefling']
+        if race not in race_list:
+        #Before moving along, we perform a check to see if the input is just the lowercase of the valid races:
+            bool_check = []
+            for item in race_list:
+                state = race == item.lower()
+                bool_check.append(state)
+            if True not in bool_check:
+                raise ValueError("Your race is not a valid DnD race. Valid race inputs include: {}.".format(race_list))
+        self._r = race.capitalize()
+
+    race = property(auto_race,set_race)
+    
+    
+#We force 'char_class' to be of the acceptable DnD classes:
+    def auto_char_class(self):
+        return self._cl
+    
+    def set_char_class(self, char_class):
+        class_list = ['Barbarian','Bard','Cleric','Druid','Fighter','Monk','Paladin','Ranger','Rogue','Sorcerer',
+                      'Warlock','Wizard']
+        if char_class not in class_list:
+        #Before moving along, we perform a check to see if the input is just the lowercase of the valid classes:
+            bool_check = []
+            for item in class_list:
+                state = char_class == item.lower()
+                bool_check.append(state)
+            if True not in bool_check:
+                raise ValueError("Your class is not a valid DnD class. Valid class inputs include: {}.".format(class_list))
+        self._cl = char_class.capitalize()
+
+    char_class = property(auto_char_class,set_char_class)
+    
+    
+#We define various useful methods for you to perform on your character:
     def get_stats(self):
+        '''This method provides an asthetic way of outputting your character's six statistics' values.'''
         print("Str: {} | Dex: {} | Con: {} | Int: {} | Wis: {} | Cha: {}\n".format(self.strength,self.dexterity,
               self.constitution,self.intelligence,self.wisdom,self.charisma))
         
+        
     def reroll_stats(self,stat='',all_stats=False):
-        '''This function rerolls either a certain statistic for your character or all of your character's\
+        '''This method rerolls either a certain statistic for your character or all of your character's\
  statistics at the same time. By default, 'all_stats' is False, meaning that your input need only include\
  either the abbreviation for the stat you wish to reroll or the stat's full name. If 'all_stats' is set to be\
  True, then the 'stat' input is ignored and rerolls are applied to each statistic.'''
