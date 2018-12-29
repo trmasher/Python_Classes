@@ -60,3 +60,12 @@ class LatLong:
                 self._sec = value
                 
     seconds = property(auto_seconds, set_seconds)
+    
+    
+    #We define a function to convert our objects dms coordinates into decimal degree coordinates
+    def get_dd(self):
+        dec_sec = self.seconds/3600
+        dec_min = self.minutes/60
+        dd = self.degrees + dec_min + dec_sec
+        return "Your coordinates in decimal degrees are '{}'.".format(dd)
+    
